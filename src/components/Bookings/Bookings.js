@@ -6,13 +6,19 @@ const Bookings = () => {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/bookings?email=${loggedInUser.email}`)
+    fetch(`http://localhost:5000/bookings?email=${loggedInUser.email}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => setBookings(data));
   }, [loggedInUser.email]);
   return (
     <div>
-      <h4>Your bookings...</h4>
+      <h4>You have {bookings.length} bookings</h4>
       {bookings.map((booking) => (
         <li key={booking._id}>
           {booking.name}, {booking.email} from{" "}
